@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Insultador</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#0f0f0f;
+    color:white;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.container{
+    width:90%;
+    max-width:700px;
+    text-align:center;
+}
+
+h1{
+    font-size:3rem;
+    margin-bottom:25px;
+    letter-spacing:2px;
+}
+
+.card{
+    background:#181818;
+    border:1px solid #2a2a2a;
+    border-radius:20px;
+    padding:35px;
+    min-height:180px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:20px;
+}
+
+#insulto{
+    font-size:2rem;
+    font-weight:bold;
+}
+
+#significado{
+    font-size:1rem;
+    color:#bdbdbd;
+    max-width:500px;
+    display:none;
+    line-height:1.5;
+}
+
+.buttons{
+    margin-top:25px;
+    display:flex;
+    gap:15px;
+    justify-content:center;
+    flex-wrap:wrap;
+}
+
+button{
+    border:none;
+    background:white;
+    color:black;
+    padding:14px 28px;
+    border-radius:14px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:0.2s;
+}
+
+button:hover{
+    transform:scale(1.05);
+}
+
+#btnSignificado{
+    display:none;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Insultador</h1>
+
+    <div class="card">
+        <div id="insulto">
+            Pulsa el botón
+        </div>
+
+        <div id="significado"></div>
+    </div>
+
+    <div class="buttons">
+        <button onclick="generarInsulto()">
+            Generar insulto
+        </button>
+
+        <button id="btnSignificado" onclick="mostrarSignificado()">
+            Ver significado
+        </button>
+    </div>
+
+</div>
+
+<script>
+const insultos = [
+{
+nombre:"Adefesio",
+significado:"Persona o cosa ridícula, extravagante o muy fea."
+},
+{
+nombre:"Adoquín",
+significado:"Persona torpe o ignorante."
+},
+{
+nombre:"Apollardao",
+significado:"Atontado, confuso, despistado o torpe."
+},
+{
+nombre:"Asno",
+significado:"Lerdo, atontado, bobo, corto de luces."
+},
+{
+nombre:"Baboso",
+significado:"Bobo, simple o adulador."
+},
+{
+nombre:"Bellaco",
+significado:"Malo, pícaro o ruin."
+},
+{
+nombre:"Berzotas",
+significado:"Persona tonta o necia."
+},
+{
+nombre:"Bocachancla",
+significado:"Persona que habla sin pensar."
+},
+{
+nombre:"Cansino",
+significado:"Pesado y aburrido."
+},
+{
+nombre:"Cantamañanas",
+significado:"Persona irresponsable y fantasiosa."
+},
+{
+nombre:"Cazurro",
+significado:"Alguien muy bruto o grosero."
+},
+{
+nombre:"Cenutrio",
+significado:"Torpe, desmañado o estúpido."
+},
+{
+nombre:"Comemierda",
+significado:"Persona considerada despreciable."
+},
+{
+nombre:"Cretinazo",
+significado:"Estúpido y arrogante."
+},
+{
+nombre:"Fantoche",
+significado:"Persona ridícula que presume de lo que no es."
+},
+{
+nombre:"Gaznápiro",
+significado:"Palurdo o simplón."
+},
+{
+nombre:"Gilipollas",
+significado:"Estúpido o corto de luces."
+},
+{
+nombre:"Huevón",
+significado:"Tonto o falto de inteligencia."
+},
+{
+nombre:"Idiota",
+significado:"Persona tonta o de poco entendimiento."
+},
+{
+nombre:"Imbécil",
+significado:"Tonto o falto de inteligencia."
+},
+{
+nombre:"Joputa",
+significado:"Insulto fuerte dirigido a alguien despreciable."
+},
+{
+nombre:"Lameculos",
+significado:"Persona aduladora y servil."
+},
+{
+nombre:"Lerdo",
+significado:"Tardo y torpe para comprender."
+},
+{
+nombre:"Majadero",
+significado:"Necio y obstinado."
+},
+{
+nombre:"Malandrín",
+significado:"Persona malvada o de mala vida."
+},
+{
+nombre:"Mamarracho",
+significado:"Persona ridícula o extravagante."
+},
+{
+nombre:"Mameluco",
+significado:"Hombre necio y bobo."
+},
+{
+nombre:"Mandril",
+significado:"Joven de poco seso."
+},
+{
+nombre:"Melón",
+significado:"Persona torpe o necia."
+},
+{
+nombre:"Memo",
+significado:"Tonto o simple."
+},
+{
+nombre:"Mentecato",
+significado:"Tonto y falto de juicio."
+},
+{
+nombre:"Mequetrefe",
+significado:"Persona inútil y entrometida."
+},
+{
+nombre:"Merluzo",
+significado:"Hombre bobo o tonto."
+},
+{
+nombre:"Mindundi",
+significado:"Persona insignificante."
+},
+{
+nombre:"Ñoño",
+significado:"Persona apocada y de poco ingenio."
+},
+{
+nombre:"Orangután",
+significado:"Persona bruta y poco refinada."
+},
+{
+nombre:"Orate",
+significado:"Persona de poco juicio."
+},
+{
+nombre:"Palurdo",
+significado:"Persona con poca educación."
+},
+{
+nombre:"Papanatas",
+significado:"Persona simple y crédula."
+},
+{
+nombre:"Parguelas",
+significado:"Persona cobarde o pringada."
+},
+{
+nombre:"Patán",
+significado:"Persona tosca y zafia."
+},
+{
+nombre:"Pazguato",
+significado:"Simple o fácilmente impresionable."
+},
+{
+nombre:"Pelmazo",
+significado:"Persona molesta y pesada."
+},
+{
+nombre:"Pendejo",
+significado:"Tonto o estúpido."
+},
+{
+nombre:"Petardo",
+significado:"Persona muy molesta."
+},
+{
+nombre:"Piltrafilla",
+significado:"Persona insignificante."
+},
+{
+nombre:"Pintamonas",
+significado:"Persona ridícula o inútil."
+},
+{
+nombre:"Plasta",
+significado:"Persona pesada e inoportuna."
+},
+{
+nombre:"Pringao",
+significado:"Persona que se deja engañar fácilmente."
+},
+{
+nombre:"Sabandija",
+significado:"Persona despreciable y molesta."
+},
+{
+nombre:"Sabelotodo",
+significado:"Persona que presume de saber mucho."
+},
+{
+nombre:"Sieso",
+significado:"Persona antipática y desagradable."
+},
+{
+nombre:"Soplagaitas",
+significado:"Imbécil o estúpido."
+},
+{
+nombre:"Tarugo",
+significado:"Persona torpe."
+},
+{
+nombre:"Tocapelotas",
+significado:"Persona muy fastidiosa."
+},
+{
+nombre:"Tolai",
+significado:"Tonto o bobo."
+},
+{
+nombre:"Tontolaba",
+significado:"Persona muy tonta."
+},
+{
+nombre:"Tunante",
+significado:"Pícaro o bribón."
+},
+{
+nombre:"Zampabollos",
+significado:"Persona que come en exceso."
+},
+{
+nombre:"Zascandil",
+significado:"Persona inquieta y enredadora."
+},
+{
+nombre:"Zoquete",
+significado:"Persona tarda en comprender."
+},
+{
+nombre:"Zote",
+significado:"Ignorante y muy torpe."
+}
+];
+
+let insultoActual = null;
+
+function generarInsulto(){
+
+    insultoActual = insultos[Math.floor(Math.random() * insultos.length)];
+
+    document.getElementById("insulto").textContent = insultoActual.nombre;
+
+    document.getElementById("significado").style.display = "none";
+
+    document.getElementById("btnSignificado").style.display = "inline-block";
+}
+
+function mostrarSignificado(){
+
+    const significado = document.getElementById("significado");
+
+    significado.textContent = insultoActual.significado;
+
+    significado.style.display = "block";
+}
+</script>
+
+</body>
+</html>
